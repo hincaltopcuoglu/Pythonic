@@ -1,2 +1,1 @@
-# pythonic
-Machine Learning based Python codes can be found here
+Entropy Based Feature selection method implemented with multiprocessing
