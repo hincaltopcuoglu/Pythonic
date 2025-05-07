@@ -1,0 +1,4 @@
+This is a sample text file.
+This file contains some words that repeat.
+Sample text files are useful for testing.
+This is just an example of a text file with repeating words.
