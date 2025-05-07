@@ -1242,7 +1242,8 @@ def set_operation(list1: list[int], list2: list[int]) -> tuple:
 
 '''
 Dictionary and Set Challenge:
-Write a function that takes a list of integers and returns the top 3 most frequent elements. If there's a tie, return the smaller number first.
+Write a function that takes a list of integers and 
+returns the top 3 most frequent elements. If there's a tie, return the smaller number first.
 
 Example:
 
@@ -1255,3 +1256,107 @@ Output: [4, 1, 2]
 # 3 appears 1 time
 This problem tests your ability to count frequencies using dictionaries and sort based on multiple criteria.
 '''
+
+def top_k_elements(numbers: list[int], k: int = 3) -> list[int]:
+    frequency = {}
+    for num in numbers:
+        if num in frequency:
+            frequency[num] +=1
+        else:
+            frequency[num] = 1
+
+        sorted_items = sorted(frequency.items() , key=lambda x: (-x[1], x[0]))
+
+        result = [item[0] for item in sorted_items[:k]]
+
+    return result
+
+#print(top_k_elements([1, 1, 1, 2, 2, 3, 4, 4, 4, 4]))
+
+
+
+#######################################################################
+
+
+'''
+Tuple Challenge:
+Write a function that takes a list of (name, age, score) tuples and returns a new list of names, 
+sorted first by age (ascending) and then by score (descending) for people of the same age.
+
+Example:
+
+Input: [("Alice", 20, 88), ("Bob", 20, 92), ("Charlie", 19, 95), ("David", 22, 85)]
+Output: ["Charlie", "Bob", "Alice", "David"]
+# Explanation: 
+# Charlie is youngest (19)
+# Bob and Alice are both 20, but Bob has higher score
+# David is oldest (22)
+'''
+
+def sort_by_age_and_score(people = list[tuple]) -> list[str]:
+    # sort the list of tuples by age (ascending) and then by score (descending)
+    sorted_people = sorted(people, key= lambda x: (x[1],-x[2]))
+
+    # extract just names from sorted list
+    result = [person[0] for person in sorted_people]
+
+    return result
+
+
+#print(sort_by_age_and_score([("Alice", 20, 88), ("Bob", 20, 92), ("Charlie", 19, 95), ("David", 22, 85)]))
+
+
+
+#######################################################################
+
+'''
+Nested Data Structure Challenge:
+Write a function that processes a list of sales records, 
+where each record is a tuple of (product_id, quantity, price). 
+The function should return a dictionary with:
+
+The total revenue for each product
+The total quantity sold for each product
+The average price per unit for each product
+Example:
+
+Input: [(101, 3, 10), (102, 2, 15), (101, 5, 12), (103, 1, 20)]
+Output: {
+    101: {"revenue": 90, "quantity": 8, "average_price": 11.25},
+    102: {"revenue": 30, "quantity": 2, "average_price": 15.0},
+    103: {"revenue": 20, "quantity": 1, "average_price": 20.0}
+}
+
+'''
+
+def process_sales(sales: list[tuple]) -> dict:
+    
+    # initilize a dictionary to store results
+    results = {}
+    
+    for product_id, quantity, price in sales:
+        revenue = quantity * price
+
+        # if this is the first time we're seeing this product, initialize its entry
+        if product_id not in results:
+            results[product_id] = {
+                "revenue":0,
+                "quantity":0,
+                "average_price":0
+            }
+    
+    
+        # Update the product's data
+        results[product_id]["revenue"] += revenue
+        results[product_id]["quantity"] += quantity
+    
+    # calculate average price for each product_id
+    for product_id in results:
+        total_revenue = results[product_id]["revenue"]
+        total_quantity = results[product_id]["quantity"]
+        results[product_id]["average_price"] = total_revenue / total_quantity
+
+    return results
+    
+
+print(process_sales([(101, 3, 10), (102, 2, 15), (101, 5, 12), (103, 1, 20)]))
