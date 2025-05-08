@@ -1491,13 +1491,13 @@ Pattern 1: Fixed-size window
 '''
 
 
-def fixed_window(arr, k):
-    result = []
-    for i in range(len(arr) - k + 1):
-        # Process window arr[i:i+k]
-        window_result = process_window(arr[i:i+k])
-        result.append(window_result)
-    return result
+#def fixed_window(arr, k):
+#    result = []
+#    for i in range(len(arr) - k + 1):
+#        # Process window arr[i:i+k]
+#        window_result = process_window(arr[i:i+k])
+#        result.append(window_result)
+#    return result
 
 
 '''
