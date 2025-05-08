@@ -1,6 +1,7 @@
 import re
-from collections import Counter
+from collections import Counter, defaultdict, deque
 import math
+import heapq
 
 '''
 Python Fundamentals Question 1:
@@ -1359,4 +1360,381 @@ def process_sales(sales: list[tuple]) -> dict:
     return results
     
 
-print(process_sales([(101, 3, 10), (102, 2, 15), (101, 5, 12), (103, 1, 20)]))
+#print(process_sales([(101, 3, 10), (102, 2, 15), (101, 5, 12), (103, 1, 20)]))
+
+
+
+
+#######################################################################
+
+'''
+Collections Counter Challenge:
+Write a function that takes a list of integers and returns the k most common elements. 
+If there's a tie, return the elements in order of their first appearance.
+
+Example:
+
+Input: [1, 1, 1, 2, 2, 3, 3, 3, 4], k=2
+Output: [1, 3]
+
+'''
+
+def most_common_elements(numbers: list[int], k: int) -> list[int]:
+
+    counter = Counter(numbers)
+
+    most_common = counter.most_common(k)
+
+    result = [item[0] for item in most_common]
+
+    return result
+
+#print(most_common_elements([1, 1, 1, 2, 2, 3, 3, 3, 4],2))
+
+
+
+#######################################################################
+
+'''
+DefaultDict Challenge:
+Write a function that groups strings by their first letter. 
+Return a dictionary where keys are the first letters and values are lists of strings starting with that letter.
+
+Example:
+
+Input: ["apple", "banana", "cherry", "date", "blueberry", "avocado"]
+Output: {
+    'a': ['apple', 'avocado'],
+    'b': ['banana', 'blueberry'],
+    'c': ['cherry'],
+    'd': ['date']
+}
+
+'''
+
+def group_by_first_letter(words: list[str]) -> dict:
+
+    grouped = defaultdict(list)
+
+    for word in words:
+        first_letter = word[0]
+        grouped[first_letter].append(word)
+
+    return (grouped)
+
+#print(group_by_first_letter(["apple", "banana", "cherry", "date", "blueberry", "avocado"]))
+
+
+
+#######################################################################
+'''
+Simple Sliding Window Solution:
+
+'''
+
+def max_sliding_window_simple(nums: list[int], k:int) -> list[int]:
+    result = []
+
+    # for each window position
+    for i in range(len(nums) -k + 1):
+        window = nums[i:i+k]
+        max_val = max(window)
+        result.append(max_val)
+
+    return result
+
+
+#print(max_sliding_window_simple([1, 3, -1, -3, 5, 3, 6, 7], 3))
+
+
+#######################################################################
+
+'''
+Deque Challenge:
+Implement a function that finds the maximum value in each sliding window of size k in an array.
+
+Example:
+
+Input: [1, 3, -1, -3, 5, 3, 6, 7], k=3
+Output: [3, 3, 5, 5, 6, 7]
+'''
+
+def max_sliding_window(numbers: list[int], k:int) -> list[int]:
+    result = []
+    window = deque() # will store indices, not values
+
+    for i, num in enumerate(numbers):
+        # remove elements outside the current window
+        while window and window[0] <= i - k:
+            window.popleft()
+
+        # remove elements smaller than the current element
+        while window and numbers[window[-1]] < num:
+            window.pop()
+
+        # add current element's index
+        window.append(i)
+
+        # if we've processed at least k elements, add the maximum to result
+        if i >= k-1:
+            result.append(numbers[window[0]])
+    return result
+
+##print(max_sliding_window([1, 3, -1, -3, 5, 3, 6, 7], 3))
+
+
+#######################################################################
+
+'''
+Pattern 1: Fixed-size window
+'''
+
+
+def fixed_window(arr, k):
+    result = []
+    for i in range(len(arr) - k + 1):
+        # Process window arr[i:i+k]
+        window_result = process_window(arr[i:i+k])
+        result.append(window_result)
+    return result
+
+
+'''
+Let's implement a complete example for Pattern 1 (Fixed-size window):
+
+Example: Calculate the average of each window of size k in an array
+'''
+
+def average_fixed_window(numbers:list[int], k:int) -> list:
+    result = []
+    for i in range(len(numbers) - k + 1):
+        avg_window = sum(numbers[i:i+k]) / k
+        result.append(avg_window)
+
+    return result
+
+#print(average_fixed_window([1, 3, 5, 7, 9, 2, 4],3)) # this is O(n*k)
+
+# lets write it in O(n) optimized
+
+def average_fixed_window_optimized(numbers:list[int], k:int) -> list:
+    result = []
+
+    # calculate sum of first window
+    window_sum = sum(numbers[:k])
+    result.append(window_sum / k)
+
+
+    # use sliding window to calculate remaining averages
+    for i in range(len(numbers) - k):
+        # remove the element going out of the window
+        window_sum -= numbers[i]
+
+        # add the element coming into the window
+        window_sum += numbers[i+k]
+
+        # calculate average
+        result.append(window_sum / k)
+    
+    return result
+
+#print(average_fixed_window_optimized([1, 3, 5, 7, 9, 2, 4],3)) # this is O(n) approach.
+
+
+
+#######################################################################
+
+'''
+Let's implement Pattern 2: Variable-size window with a condition.
+
+Example: Find the smallest subarray with a sum greater than or equal to a target value
+This is a classic variable-size window problem where we expand the window until we meet a condition, 
+then shrink it to find the minimum size.
+'''
+
+def variable_size_window(numbers:list[int], target:int):
+    min_length = float("inf")
+    window_sum = 0
+    left = 0
+
+    for right in range(len(numbers)):
+        # expand the window by including numbers[right]
+        window_sum += numbers[right]
+
+        # shrink window from left until condition is no longer met
+        while window_sum >= target:
+            min_length = min(min_length, right - left + 1)
+
+            # remove left most element from window
+            window_sum -= numbers[left]
+            left +=1
+
+    # return 0 if no valid subarray found
+    return min_length if min_length != float('inf') else 0
+
+#print(variable_size_window([2, 1, 5, 2, 3, 2],7))
+
+
+#######################################################################
+
+'''
+Let's try another example for Pattern 2 (variable-size window):
+
+Example: Longest Substring with At Most K Distinct Characters
+In this problem, we need to find the length of the longest substring that contains at most K distinct characters.
+
+Input: s = "eceba", k = 2
+Output: 3
+Explanation: The substring "ece" has length 3 with 2 distinct characters.
+'''
+
+def longest_substring_with_k_distinct(text:str,k:int) -> int:
+
+    if not text or k == 0:
+        return 0
+    
+    char_count = {}
+    max_length = 0
+    left = 0
+
+    for right in range(len(text)):
+        right_char = text[right]
+        char_count[right_char] = char_count.get(right_char,0) + 1
+
+        # shrink window from left until we have at most k distinct characcters
+        while len(char_count) > k:
+            left_char = text[left]
+            char_count[left_char] -= 1
+            if char_count[left_char] == 0:
+                del char_count[left_char]
+            left += 1
+
+        # update maximum length
+        max_length = max(max_length, right - left + 1)
+
+    return max_length
+
+#print(longest_substring_with_k_distinct("eceba",2))
+
+
+
+#######################################################################
+
+'''
+Let's explore Pattern 3: Sliding window with deque for finding maximum/minimum values.
+
+Example: Maximum of All Subarrays of Size K
+Given an array and an integer k, find the maximum element in each sliding window of size k.
+
+Input: [1, 3, -1, -3, 5, 3, 6, 7], k = 3
+Output: [3, 3, 5, 5, 6, 7]
+'''
+
+def max_sliding_windows(nums: list[int], k:int) -> list[int]:
+    result = []
+    window = deque() # will store indices, not values
+
+    for i, num in enumerate(nums):
+        # remove elements outside the current window
+        while window and window[0] <= i - k:
+            window.popleft()
+
+
+        # remove samller elements from the back of the deque
+        # they can never be the maximum in the current window
+        while window and nums[window[-1]] < num:
+            window.pop()
+
+        # add current element's index
+        window.append(i)
+
+        # if we've processed at k elements, add the maximum to the result
+        if i >= k -1:
+            result.append(nums[window[0]])
+
+    return result
+
+#print(max_sliding_windows([1, 3, -1, -3, 5, 3, 6, 7], k = 3))
+
+
+#######################################################################
+
+'''
+Let's try another example with deque: finding the minimum value in each sliding window.
+
+Example: Minimum of All Subarrays of Size K
+Given an array and an integer k, find the minimum element in each sliding window of size k.
+
+Input: [2, 1, 4, 5, 3, 7, 1, 2], k = 3
+Output: [1, 1, 3, 3, 1, 1]
+'''
+
+def min_sliding_windows(nums: list[int], k:int) -> list[int]:
+    result = []
+    window = deque()
+
+    for i, num in enumerate(nums):
+        while window and window[0] <= i - k:
+            window.popleft()
+
+        while window and nums[window[-1]] > num:
+            window.pop()
+
+        window.append(i)
+
+        if i >=k -1:
+            result.append(nums[window[0]])
+
+    return result
+
+#print(min_sliding_windows([2, 1, 4, 5, 3, 7, 1, 2], k = 3))
+
+
+#######################################################################
+
+'''
+Let's try another example with deque: finding the median in each sliding window.
+
+Example: Median of All Subarrays of Size K
+Given an array and an integer k, find the median element in each sliding window of size k.
+
+Input: [1, 3, -1, -3, 5, 3, 6, 7], k = 3
+Output: [1, -1, -1, 3, 5, 6]
+This is more complex than finding min/max, as we need to maintain the elements in sorted order. 
+We'll use two deques to track the smaller and larger halves of the window
+
+'''
+
+def median_sliding_window(nums:list[int], k:int) -> list[int]:
+    result = []
+
+    # for odd k, we want (k+1)/2 elements in the smaller half
+    # for even k, we want k/2 elements in each half
+    smaller_half_size = (k + 1) // 2
+
+    # use a list to store the current window
+    current_window = []
+
+    for i in range(len(nums)):
+        # add the current element to our window
+        current_window.append(nums[i])
+
+        # if we have more than k elements, remove the oldest one
+        if len(current_window) > k:
+            current_window.pop(0)
+
+        # if we have a complete window, find the median
+        if len(current_window) == k:
+            sorted_window = sorted(current_window)
+
+            # for odd k, the median is the middle element
+            if k % 2 == 1:
+                result.append(sorted_window[k // 2])
+            # for even k, the median is the average of the two middle elements
+            else:
+                result.append((sorted_window[k // 2 - 1] + sorted_window[k // 2])/2)
+
+    return result
+
+#print(median_sliding_window([1, 3, -1, -3, 5, 3, 6, 7], k = 3))
+
