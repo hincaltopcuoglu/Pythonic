@@ -2,6 +2,7 @@ import re
 from collections import Counter, defaultdict, deque
 import math
 import heapq
+from functools import reduce
 
 '''
 Python Fundamentals Question 1:
@@ -1737,4 +1738,205 @@ def median_sliding_window(nums:list[int], k:int) -> list[int]:
     return result
 
 #print(median_sliding_window([1, 3, -1, -3, 5, 3, 6, 7], k = 3))
+
+
+
+#######################################################################
+
+'''
+1. Lists and List Comprehensions
+'''
+
+# Exercise 1.1: Create a list of squares for numbers from 1 to 10 using a list comprehension.
+
+#print(list(map(lambda x: x*x ,range(1,10))))
+
+# Exercise 1.2: Given a list of strings, create a new list containing only strings with more than 5 characters.
+
+strings = ['Hello There','adad','dskfmds']
+
+#print(list(filter(lambda s: len(s)>5,  strings )))
+
+# Exercise 1.3: Flatten a list of lists into a single list using a list comprehension.
+
+nested_list = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+#print(list(val for sublist in nested_list for val in sublist))
+
+
+
+#######################################################################
+
+'''
+2. Dictionaries
+'''
+
+# Exercise 2.1: Count the frequency of each character in a string using a dictionary.
+# Input: "hello world"
+
+#string = "hello world"
+#print(Counter(string))
+
+# Exercise 2.2: Merge two dictionaries into one.
+
+dict1 = {'a': 1, 'b': 2}
+dict2 = {'c': 3, 'd': 4}
+
+dict1.update(dict2)
+
+#print(dict1)
+
+# Exercise 2.3: Create a dictionary where keys are numbers from 1 to 10 and values are their cubes.
+
+dct = {}
+
+for i in range(1,11):
+    dct[i] = i**3
+
+#print(dct)
+
+
+
+
+#######################################################################
+
+'''
+3. Sets
+'''
+
+# Exercise 3.1: Find common elements between two lists using sets.
+
+list1 = [1, 2, 3, 4, 5]
+list2 = [4, 5, 6, 7, 8]
+
+#print(set(list1).intersection(list2))
+
+# Exercise 3.2: Remove duplicates from a list while preserving order.
+
+input_list = [1, 2, 3, 1, 2, 4, 5, 4, 6]
+# Expected output: [1, 2, 3, 4, 5, 6]
+
+#print(list(dict.fromkeys(input_list)))
+
+# Exercise 3.3: Check if a string contains all the vowels using sets.
+
+# Example: "sequoia" contains 'a', 'e', 'i', 'o', 'u'
+
+# string = "sequoia"
+
+def contains_all_vowels(s):
+    vowels = {'a', 'e', 'i', 'o', 'u'}
+    return vowels.issubset(set(s.lower()))
+
+#print(contains_all_vowels(string))
+
+
+#######################################################################
+
+'''
+4. Lambda Functions, Map, Filter, Reduce
+'''
+
+# Exercise 4.1: Use filter and a lambda function to get all even numbers from a list.
+
+numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+# Expected output: [2, 4, 6, 8, 10]
+
+#print(list(filter(lambda x: x % 2 == 0, numbers)))
+
+
+# Exercise 4.2: Use map to convert a list of temperatures from Celsius to Fahrenheit.
+
+celsius = [0, 10, 20, 30, 40]
+# Formula: F = C * 9/5 + 32
+# Expected output: [32.0, 50.0, 68.0, 86.0, 104.0]
+
+#print(list(map(lambda x: x * 9/5 + 32, celsius)))
+
+
+# Exercise 4.3: Use reduce to find the product of all numbers in a list.
+
+numbers = [1, 2, 3, 4, 5]
+# Expected output: 120
+
+product = reduce(lambda x,y: x*y, numbers)
+#print(product)
+
+
+
+
+#######################################################################
+
+'''
+5. Combining Concepts
+'''
+
+# Exercise 5.1: Given a list of dictionaries representing people (with 'name' and 'age' keys), find the average age.
+
+people = [
+    {'name': 'Alice', 'age': 25},
+    {'name': 'Bob', 'age': 30},
+    {'name': 'Charlie', 'age': 35},
+    {'name': 'David', 'age': 40}
+]
+# Expected output: 32.5
+
+
+ages = [person['age'] for person in people]
+
+# calculate average
+average_age = sum(ages) / len(ages)
+
+#print(average_age)
+
+# or 
+#print(sum(map(lambda person: person['age'], people))/len(people))
+
+# or 
+average_age_v2 = sum(person['age'] for person in people) / len(people)
+#print(average_age_v2)
+
+
+
+# Exercise 5.2: Create a function that takes a sentence and returns a dictionary with words as keys and their lengths as values.
+
+#string =  "The quick brown fox"
+# Expected output: {'The': 3, 'quick': 5, 'brown': 5, 'fox': 3}
+
+def word_cnts(s:str) -> dict:
+    dct = {}
+    for word in s.split():
+        dct[word] = len(word)
+    return dct
+    
+
+#print(word_cnts(string))
+
+# or 
+
+def word_lenghts(sentence):
+    words = sentence.split()
+    return dict(zip(words, map(len,words)))
+
+#print(word_lenghts(string))
+
+
+
+# Exercise 5.3: Given a list of numbers, create a new list where each element is the sum of itself and all previous elements.
+
+nums = [1, 2, 3, 4, 5]
+#Expected output: [1, 3, 6, 10, 15]
+
+def running_sum(numbers):
+    result = []
+    current_sum = 0
+
+    for num in numbers:
+        current_sum += num
+        result.append(current_sum)
+    
+    return result
+
+#print(running_sum(nums))
+
 
