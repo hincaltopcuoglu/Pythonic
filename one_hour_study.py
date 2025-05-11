@@ -280,3 +280,28 @@ def pairwise_distances(X: np.ndarray) -> np.ndarray:
 
 #X = np.array([[0, 0], [1, 0], [0, 1]])
 #print(pairwise_distances(X))
+
+
+########################################################
+
+import numpy as np
+
+# Load data as strings (no header)
+data = np.genfromtxt('iris.csv', delimiter=',', dtype=str)
+
+# Extract features and species
+features = data[:, :4].astype(float)  # first 4 columns are features
+species = data[:, 4]                  # last column is species
+
+# sepal_width is the second column (index 1)
+sepal_width = features[:, 1]
+
+# Unique species
+unique_species = np.unique(species)
+
+# Compute mean sepal_width per species
+means = {}
+for sp in unique_species:
+    means[sp] = np.mean(sepal_width[species == sp])
+
+print(means)

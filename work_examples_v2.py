@@ -6,6 +6,7 @@ Problem: Given a large list of numbers, find the k most frequent elements.
 from collections import Counter,defaultdict
 import pandas as pd
 import numpy as np
+import re
 
 numbers = [1,1,1,1,1,1,1,2,2,2,2,3,3,3,3,4,4,5,6,7,8]
 
@@ -478,3 +479,25 @@ class Dataset:
 #print("Testing data shape:", np.array(test_X).shape)
 #print("Training target shape:", np.array(train_y).shape)
 #print("Testing target shape:", np.array(test_y).shape)
+
+
+############################################################################################
+
+
+
+def LongestWord(sen):
+    # Remove punctuation using regex: keep letters, numbers, and spaces
+    cleaned = re.sub(r'[^\w\s]', '', sen)
+    words = cleaned.split()
+
+    longest_word = ""
+    max_length = 0
+
+    for word in words:
+        if len(word) > max_length:
+            longest_word = word
+            max_length = len(word)
+
+    return longest_word
+
+print(LongestWord("fun&!! time"))
