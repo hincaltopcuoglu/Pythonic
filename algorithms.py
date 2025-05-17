@@ -272,3 +272,49 @@ def check_nearest_square():
 
 ############################################################################################
 
+"""
+Q-14: Write a function that, given a positive rational number with a three-digit decimal part, 
+checks whether the difference between the integer part and the integer value of the decimal part is positive, 
+and if so, determines whether this difference is a perfect square.
+"""
+
+
+def diff_int_decimal():
+    user_input = input("Enter a rational numeber whose decimal part has at most 3 digits:")
+    integer_part = int((float(user_input)))
+
+    num = float(user_input)
+    
+    # Extract decimal part as integer (three digits)
+    decimal_part = int(round((num - int(num)) * 1000))
+
+    diff = integer_part - decimal_part
+    root = diff ** 0.5
+
+    if diff > 0:
+        root = int(diff ** 0.5)
+        if root * root == diff:
+            return f"rational numbers integer part minıus decimal part {diff} is perfect square"
+        else:
+            return f"rational numbers integer part minıus decimal part {diff} is not perfect square"
+
+    else:
+        return f"Difference {diff} is not positive, so condition not met."
+
+#print(diff_int_decimal())
+
+
+############################################################################################
+
+"""
+Write a function that, given a randomly entered rational number, finds the number of digits in its decimal part and the number of digits in its integer part.
+"""
+
+def count_digits(num_str:str):
+    splitted_num = str(num_str).split(".")
+    count_integer = len(splitted_num[0])
+    count_decimal = len(splitted_num[1]) if len(splitted_num) > 1 else 0
+
+    return count_integer, count_decimal
+
+print(count_digits(13.4567))
