@@ -307,7 +307,7 @@ def diff_int_decimal():
 ############################################################################################
 
 """
-Write a function that, given a randomly entered rational number, finds the number of digits in its decimal part and the number of digits in its integer part.
+Q-15: Write a function that, given a randomly entered rational number, finds the number of digits in its decimal part and the number of digits in its integer part.
 """
 
 def count_digits(num_str:str):
