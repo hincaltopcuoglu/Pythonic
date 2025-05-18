@@ -317,4 +317,4 @@ def count_digits(num_str:str):
 
     return count_integer, count_decimal
 
-print(count_digits(13.4567))
+#print(count_digits(13.4567))
