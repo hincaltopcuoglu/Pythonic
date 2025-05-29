@@ -1,5 +1,7 @@
 import numpy as np
 from collections import Counter
+from statistics import mean
+from itertools import product
 
 """
 Q-1 : Find the sum of even and odd numners splitted in a range (1,100)
@@ -318,3 +320,227 @@ def count_digits(num_str:str):
     return count_integer, count_decimal
 
 #print(count_digits(13.4567))
+
+
+############################################################################################
+
+"""
+Q-16 : Write a function that finds the largest digit in the digits of a given integer.
+"""
+
+def find_biggest_digit(num:int) -> int:
+    return int(max((str(num))))
+
+#print(find_biggest_digit(123))
+#print(find_biggest_digit(4525425))
+#print(find_biggest_digit(459))
+
+############################################################################################
+
+"""
+Q-17 : Write a function that finds the repeating digits in the digits of a given integer.
+"""
+
+def repeating_digits(num:int) -> list[int]:
+    repeats_dict = Counter(str(num))
+    repeated_nums = []
+    for key,value in repeats_dict.items():
+        if value>1:
+            repeated_nums.append(int(key))
+    return repeated_nums
+
+#print(repeating_digits(45566667))
+
+############################################################################################
+
+"""
+Q-18 : Write a function that separates the digits of any given integer into a list.
+"""
+
+def split_to_digits(num:int) -> list:
+    return [int(digit) for digit in str(num)]
+
+#print(split_to_digits(45673234))
+
+############################################################################################
+
+"""
+Q-19 : Write a function that takes input for a sequence of N numbers.
+"""
+
+def seq_to_list():
+    n = int(input("Enter the number of elements (N):"))
+    user_input = input(f"Enter {n} numbers seperated by spaces: ")
+    numbers  = list(map(int,user_input.split()))
+    
+    if len(numbers) != n:
+        print(f"Warning: Expected {n} numbers but got {len(numbers)}.")
+    return numbers
+
+#print(seq_to_list())
+
+############################################################################################
+
+"""
+Q-20 : Write a function that finds the sum of the elements of a 10-element number sequence.
+"""
+
+def sum_of_ten_num_digits():
+    n = 10
+    user_input = input(f"Enter {n} numbers separated by spaces: ")
+    numbers  = list(map(int,user_input.split()))
+    
+
+    if len(numbers) != n:
+        print(f"Warning: Expected {n} numbers but got {len(numbers)}.")
+    
+    return sum(numbers)
+
+#print(sum_of_ten_num_digits())
+
+
+############################################################################################
+
+"""
+Q-21 : Write a function that finds the largest element in a 10-element number sequence.
+"""
+
+
+def max_of_ten_num_digits():
+    n = 10
+    user_input = input(f"Enter {n} numbers separated by spaces: ")
+    numbers  = list(map(int,user_input.split()))
+    
+
+    if len(numbers) != n:
+        print(f"Warning: Expected {n} numbers but got {len(numbers)}.")
+    
+    return max(numbers)
+
+#print(max_of_ten_num_digits())
+
+############################################################################################
+
+"""
+Q-22 : Write a function that finds the sum of the negative elements in a 10-element number sequence.
+"""
+
+def sum_neg_elements():
+    n = 10
+    user_input = input(f"Enter {n} numbers separated by spaces: ")
+    numbers  = list(map(int,user_input.split()))
+    
+    if len(numbers) != n:
+        print(f"Warning: Expected {n} numbers but got {len(numbers)}.")
+
+    neg_sums = sum(num for num in numbers if num<0)
+
+    return neg_sums
+
+
+#print(sum_neg_elements())
+
+############################################################################################
+
+"""
+Q-23: Write a function that finds the separate averages of the negative and positive elements in a 10-element number sequence.
+"""
+
+def sep_means():
+    n = 10
+    user_input = input(f"Enter {n} numbers separated by spaces: ")
+    numbers  = list(map(int,user_input.split()))
+    
+    if len(numbers) != n:
+        print(f"Warning: Expected {n} numbers but got {len(numbers)}.")
+
+    neg_nums = [num for num in numbers if num<0]
+    pos_nums = [num for num in numbers if num>0]
+
+    neg_mean = mean(neg_nums) if neg_nums else None
+    pos_mean = mean(pos_nums) if pos_nums else None
+
+    return f" average of negative values is {neg_mean}, average of positive values is {pos_mean}"
+
+#print(sep_means())
+
+
+############################################################################################
+
+"""
+Q-24:  Write a function that counts the number of negative and positive elements in a number sequence of any length.
+"""
+
+def cnt_neg_pos():
+    user_input = input(f"Enter numbers separated by spaces: ")
+    numbers  = list(map(int,user_input.split()))
+
+    neg_nums = [num for num in numbers if num < 0]
+    pos_nums = [num for num in numbers if num > 0]
+
+
+    return f"Count of negative numbers is {len(neg_nums)}, Count of positive numbers is {len(pos_nums)}"
+
+#print(cnt_neg_pos())
+
+
+############################################################################################
+
+"""
+Q-25: Write a function that, given a sequence A of 10 elements, loads the negative elements into a separate list and the positive elements into another separate list.
+"""
+
+def sep_neg_pos_elements():
+    n = 10
+    user_input = input(f"Enter {n} numbers separated by spaces: ")
+    numbers = list(map(int, user_input.split()))
+
+    if len(numbers) != n:
+        print(f"Warning: Expected {n} numbers but got {len(numbers)}.")
+
+    neg_nums = [num for num in numbers if num < 0]
+    pos_nums = [num for num in numbers if num > 0]
+    
+    return f"Negative numbers is {neg_nums}, Positive numbers is {pos_nums}"
+
+#print(sep_neg_pos_elements())
+
+############################################################################################
+
+"""
+Q-26: Write a function that sorts a number sequence A of N elements in ascending order.
+"""
+
+def sorted_elements():
+    user_input = input(f"Enter numbers separated by spaces: ")
+    numbers = list(map(int,user_input.split()))
+    return sorted(numbers)
+
+#print(sorted_elements())
+
+
+############################################################################################
+
+"""
+Q-27: Write a function that, given an ascending sorted sequence of N numbers, finds a desired number using binary search.
+"""
+
+def find_num_binary():
+    user_input = input("Enter numbers separated by spaces in ascending order: ")
+    desired_num = int(input("Enter your desired number to be found: "))
+    numbers = list(map(int, user_input.split()))
+
+    left, right = 0, len(numbers) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if numbers[mid] == desired_num:
+            return mid  # Found, return index
+        elif numbers[mid] < desired_num:
+            left = mid + 1
+        else:
+            right = mid - 1
+    return -1  # Not found
+
+#print(find_num_binary())
+
+############################################################################################
